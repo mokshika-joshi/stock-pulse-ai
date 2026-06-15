@@ -6,4 +6,5 @@ The extension uses Yahoo Finance data to deliver real-time stock prices, charts,
 With Stock Pulse AI, you can quickly get a clear snapshot of any stock and make faster, smarter decisions—all directly from your browser.
 
 AI Stock Analysis Chrome Extension - https://youtu.be/PPi4g6PZAfE?si=Hgc4DWBTjrvWSGUC
+
 API & LLM Interaction Walkthrough - https://youtu.be/P5vCoGEQ5TE?si=Y9fCWZn7R4e0JMvl
