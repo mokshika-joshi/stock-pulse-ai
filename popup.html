@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Pulse AI</title>
+    <link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header & Market Mood -->
+        <header class="header">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                <h1>Stock Pulse AI</h1>
+            </div>
+        </header>
+
+        <section class="market-mood-card">
+            <div class="mood-header">
+                <h2>Market Mood</h2>
+                <span id="market-mood-badge" class="badge loading">Analyzing...</span>
+            </div>
+            <p id="market-mood-text" class="mood-text">Gathering the latest market sentiment data via AI...</p>
+            <div id="indices-container" class="indices-grid">
+                <div><span>NIFTY:</span> <span id="nifty-text">...</span></div>
+                <div><span>SENSEX:</span> <span id="sensex-text">...</span></div>
+            </div>
+        </section>
+
+        <!-- Search & Add -->
+        <section class="add-stock">
+            <div class="input-group">
+                <input type="text" id="ticker-input" placeholder="Search stock (e.g. RELIANCE)" autocomplete="off">
+                <button id="add-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            </div>
+            <div id="autocomplete-list" class="autocomplete-items hidden"></div>
+            <div id="add-error" class="error-msg"></div>
+            <div style="text-align: right; margin-top: 8px;">
+                <a href="#" id="open-compare-btn" style="font-size: 0.8rem; color: var(--accent); text-decoration: none; font-weight: 500;">Compare Stocks</a>
+            </div>
+        </section>
+
+        <!-- Portfolio Score -->
+        <section class="portfolio-score-card hidden" id="portfolio-score-section">
+            <div class="score-header">
+                <h2>Portfolio Score</h2>
+                <div class="score-circle loading" id="portfolio-score-badge">-</div>
+            </div>
+            <p id="portfolio-score-text" class="score-text">Analyzing watchlist strength...</p>
+        </section>
+
+        <!-- Watchlist -->
+        <section class="watchlist" id="watchlist-container">
+            <!-- Stocks will be injected here -->
+        </section>
+        
+        <!-- Detailed View Modal -->
+        <div id="analysis-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">Ticker Analysis</h2>
+                    <button id="close-modal-btn" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="modal-loader" class="loader">
+                        <div class="spinner"></div>
+                        <p>Analyzing price trends using Gemini API...</p>
+                    </div>
+                    <div id="modal-content-details" class="hidden">
+                        <div class="recommendation-banner" id="rec-banner">
+                            <span id="rec-badge" class="badge"></span>
+                            <p id="rec-reasoning"></p>
+                        </div>
+                        
+                        <div class="details-section">
+                            <h3>Why it's moving</h3>
+                            <p id="moving-reason"></p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Impact Outlook</h3>
+                            <p><strong>Short-Term:</strong> <span id="short-term"></span></p>
+                            <p><strong>Long-Term:</strong> <span id="long-term"></span></p>
+                        </div>
+
+                        <div class="details-grid">
+                            <div class="case-card bull-case">
+                                <h3>Bull Case</h3>
+                                <p id="bull-case"></p>
+                            </div>
+                            <div class="case-card bear-case">
+                                <h3>Bear Case</h3>
+                                <p id="bear-case"></p>
+                            </div>
+                        </div>
+
+                        <div class="details-section risks">
+                            <h3>Risk Factors</h3>
+                            <ul id="risk-factors"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        <!-- Compare Modal -->
+        <div id="compare-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Compare Stocks</h2>
+                    <button id="close-compare-btn" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="compare-selectors">
+                        <select id="compare-stock-1" class="compare-select">
+                            <option value="">Select Stock 1</option>
+                        </select>
+                        <select id="compare-stock-2" class="compare-select">
+                            <option value="">Select Stock 2</option>
+                        </select>
+                        <button id="run-compare-btn">Run Comparison</button>
+                    </div>
+                    
+                    <div id="compare-loader" class="loader hidden">
+                        <div class="spinner"></div>
+                        <p>AI analyzing head-to-head...</p>
+                    </div>
+
+                    <div id="compare-results" class="hidden">
+                        <div class="details-section">
+                            <h3>Winner</h3>
+                            <p><strong>Short-Term:</strong> <span id="cmp-short"></span></p>
+                            <p><strong>Long-Term:</strong> <span id="cmp-long"></span></p>
+                        </div>
+                        <div class="details-section">
+                            <h3>Risk & Verdict</h3>
+                            <p><strong>Risk Comparison:</strong> <span id="cmp-risk"></span></p>
+                            <p style="margin-top:10px;"><strong>Verdict:</strong> <span id="cmp-verdict" style="color:var(--accent); font-weight:600;"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
