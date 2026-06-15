@@ -1,6 +1,6 @@
 from google import genai
 
-client = genai.Client(api_key="AIzaSyDq8A072v4OBQ-q3TiaAcL9qlPwdYmDNP0")
+client = genai.Client(api_key)
 chat = client.chats.create(model="gemini-3-flash-preview")
 
 for message in chat.get_history():
